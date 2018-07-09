@@ -32,9 +32,6 @@ class Runner(object):
 			subprocess.call(d[cmd].split(' '))
 
 
-
-
-
 		for line in l:
 			subprocess.call(line.split(' '), shell=True)	#executting the batch file line by line
 
