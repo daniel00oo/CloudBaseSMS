@@ -2,6 +2,7 @@ import os
 import subprocess
 import Converter
 import json
+import io
 
 class Runner(object):
 
@@ -25,14 +26,18 @@ class Runner(object):
 
 
 	def run(self, operatingSystem):
-		os.chdir(self.commands[operatingSystem])
-		d = self.conv.fromJSONtoDict(os.path.basename(self.commands[operatingSystem]))
+		os.chdir(os.path.dirname(self.commands[operatingSystem]))
+		d = self.conv.fromJSONtoDict(os.path.basename(self.commands[operatingSystem]))	#loading json file into memory as a dict
 
 		for cmd in d:
-			subprocess.call(d[cmd].split(' '))
+			subprocess.call(d[cmd] + ['/format:list', '>', '%s.txt' % cmd], shell=True)	
+			self.conv.makeJSON('%s.txt' % cmd, '%s.json' % cmd)
 
+		self.conv.groupJSON('allinfo.json', d.keys())
 
-		for line in l:
-			subprocess.call(line.split(' '), shell=True)	#executting the batch file line by line
-
+#
 		os.chdir(self.cwd)									#changing the working directory back to the original
+
+
+r = Runner('files.json')
+r.run('Windows')

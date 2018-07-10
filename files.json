@@ -1,4 +1,5 @@
 {
-	"Windows" : ["Getters", "Windows", "commands.json"]
+	"Windows" : ["tools", "Windows", "commands.json"],
+	"Linux" : ["tools", "Linux", "commands.json"]
 	
 }

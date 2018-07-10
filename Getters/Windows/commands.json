@@ -1,6 +1,0 @@
-{
-	"cpu" : ["cpu", "get", "Name", "Caption", "MaxClockSpeed", "DeviceID", "status"]
-	"baseboard" : ["baseboard", "get", "Manufacturer", "Model", "Name", "PartNumber", "slotlayout", "serialnumber", "poweredon"]
-	"bios" : ["bios", "get", "name", "version", "serialnumber"]
-	"bootconfig get" : ["BootDirectory", "Caption", "TempDirectory", "Lastdrive"]
-}

@@ -13,7 +13,13 @@ class Converter(object):
 		#output: d - dictionary containing all the keys and values from 'text'
 
 		text = text.strip()
-		d = (dict(item.split(key_value__delimiter) for item in text.split(entry_demiliter)))
+		d = {}
+
+		for line in text.split('\n'):
+			tmp = line.split('=')
+			if tmp != ['']:
+				d[tmp[0]] = tmp[1]
+
 		return d
 
 	def fromDictToJson(self, d):
@@ -55,3 +61,27 @@ class Converter(object):
 		f = open(filePath)
 
 		return ast.literal_eval(json.dumps(json.loads(open(filePath).read())))
+
+	def groupJSON(self, outFile, inFiles):
+		#call: groupJSON(outFile, file1, file2, file3, ...)
+		#input: outFile - string; name of the file where all the JSONs will be grouped into
+		#		*inFiles - list of names of source files from which the text will be grouped into a single file
+		#output: -
+		s = ""
+		for file in inFiles:
+			if file[:-5] == ".json":
+				s += '\n\t"' + file[:-5] + '":\n'
+				with open(file, 'r') as f:
+					for line in f:
+						s += '\t' + line
+			else:
+				s += '\n\t"' + file + '":\n'
+				with open(file + ".json", 'r') as f:
+					for line in f:
+						s += '\t' + line
+
+		s = "{" + s + "\n}"
+
+		#s = json.dumps(s, sort_keys = True, indent = 4, separators = (',', ': '))
+
+		open(outFile, 'w').write(s)
