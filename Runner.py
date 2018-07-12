@@ -33,11 +33,6 @@ class Runner(object):
 			subprocess.call(d[cmd] + ['/format:list', '>', '%s.txt' % cmd], shell=True)	
 			self.conv.makeJSON('%s.txt' % cmd, '%s.json' % cmd)
 
-		self.conv.groupJSON('allinfo.json', d.keys())
+		self.conv.groupJSON('metrics.json', d.keys())
 
-#
 		os.chdir(self.cwd)									#changing the working directory back to the original
-
-
-r = Runner('files.json')
-r.run('Windows')
