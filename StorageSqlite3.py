@@ -1,6 +1,6 @@
 import sqlite3
 
-class Storage(object):
+class StorageSqlite3(object):
 	def __init__(self, name='database'):
 		self.name = name
 		self.db = sqlite3.connect(name + ".db")
@@ -8,6 +8,7 @@ class Storage(object):
 
 	def __exit__(self, type, val, tb):
 		self.db.close()
+		
 
 	def createDatabase(self,  params):
 
