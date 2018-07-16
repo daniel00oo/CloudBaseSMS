@@ -9,7 +9,7 @@ class Runner(object):
 	def __init__(self, loadFile):
 		"""
 			Runner - class 
-				Executes files from commands specified in 'files.json' as {"command": "file path"}
+				Executes commands from files specified in 'files.json' as {"command": "file path"}
 
 		"""
 		self.cwd = os.getcwd()

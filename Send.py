@@ -1,28 +1,35 @@
-import pika
+from Sender import Sender
+import sys
 
-class Send(object):
-	def __init__(self, url='localhost'):
-		self.url = url
+def main():
 
-		self.connection = pika.BlockingConnection(pika.ConnectionParameters(self.url))
-		self.channel = self.connection.channel()
+	ac = len(sys.argv)
+	url = 'localhost'
+	queue = 'default' 
 
+	if ac == 1:
+		print("""
+	sender [message, queue, url]
 
-	def close(self):
-		self.connection.close()
+		Used to send messages via RabbitMQ to consumer nodes
 
-	def queueDec(self, que):
-		self.channel.queue_declare(queue=que)
+		message - the message you want to be sent (e.g.: "run cpu")
+		queue - the queue for the message to be send to. This will
+				influence where the message will be redirected. 
+				(e.g.: "default")
+		url	- the url that will be used to store info (e.g.: "localhost")
+			""")
+		return(ac)
 
-	def send(self, que, message):
-		self.channel.basic_publish(
-			exchange = '',
-			routing_key = que,
-			body = message
-			)
+	if ac == 4:
+		url = sys.argv[3]
+	if ac == 3:
+		queue = sys.argv[2]
+	if ac == 2:
+		s = Sender(url)
+		s.send(sys.argv[1], queue)
 
-s = Send()
+	return(ac)
 
-s.queueDec('hello')
-s.send('hello', "Hello World!")
-s.close()
+if __name__ == '__main__':
+	main()
