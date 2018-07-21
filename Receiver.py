@@ -1,16 +1,19 @@
 import pika
 
 class Receiver(object):
-	def __init__(self, url='localhost', howToProcess=lambda x: x):
+	def __init__(self, url='localhost'):
 		self.url = url
 
 		self.connection = pika.BlockingConnection(pika.ConnectionParameters(self.url))
 		self.channel = self.connection.channel()
-		self.howToProcess = howToProcess
 
 
 	def queueDec(self, que):
 		self.channel.queue_declare(queue=que, durable=True)
+
+	def howToProcess(self, body):
+		#overrite this function to process the body/message
+		pass
 
 	def callback(self, ch, method, properties, body):
 		print("-----------------------")
