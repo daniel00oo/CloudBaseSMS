@@ -29,6 +29,13 @@ class Runner(object):
 		os.chdir(os.path.dirname(self.commands[operatingSystem]))
 		d = self.conv.fromJSONtoDict(os.path.basename(self.commands[operatingSystem]))	#loading json file into memory as a dict
 
+		try:
+			os.mkdir('metrics')
+		except:
+			pass
+
+		os.chdir('metrics')
+
 		for cmd in d:
 			subprocess.call(d[cmd] + ['/format:list', '>', '%s.txt' % cmd], shell=True)	
 			self.conv.makeJSON('%s.txt' % cmd, '%s.json' % cmd)

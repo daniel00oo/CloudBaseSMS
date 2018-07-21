@@ -1,3 +1,4 @@
 *.pyc
 testingStuff.py
 desktop.ini
+tools/*/metrics
