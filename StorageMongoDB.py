@@ -1,13 +1,16 @@
 from pymongo import MongoClient
 
 class StorageMongoDB(object):
-	def __init__(self, name, port=27017):
-		self.client = MongoClient(name, port)
-		self.db = self.client.examples
+	def __init__(self, host='localhost', port=27017):
+		self.client = MongoClient(host, port)
+		self.db = self.client.client
 
 	def addDict(self, d):
-		self.db.autos.insert(d)
+		self.db.metrics.insert_one(d)
 
 	def getDict(self, d={}):
-		return self.db.autos.find(d)
+		return self.db.metrics.find_one(d)
+
+	def getAll(self):
+		return list(self.db.metrics.find())
 

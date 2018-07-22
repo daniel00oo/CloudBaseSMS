@@ -19,7 +19,6 @@ class Receiver(object):
 		print("-----------------------")
 		print(" [x] Received %r" % body)
 		self.howToProcess(body)
-		print(" [x] Done")
 
 		ch.basic_ack(delivery_tag = method.delivery_tag)
 

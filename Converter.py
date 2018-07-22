@@ -79,9 +79,9 @@ class Converter(object):
 				with open(file + ".json", 'r') as f:
 					for line in f:
 						s += '\t' + line
+			s += ','
+		s = s[:-1]
 
 		s = "{" + s + "\n}"
-
-		#s = json.dumps(s, sort_keys = True, indent = 4, separators = (',', ': '))
 
 		open(outFile, 'w').write(s)

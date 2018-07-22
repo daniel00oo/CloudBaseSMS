@@ -17,7 +17,7 @@ def main():
 		queue - the queue for the message to be send to. This will
 				influence where the message will be redirected. 
 				(default: "default")
-		url	- the url that will be used to store info (default: "localhost")
+		url	- the url that will be used to store info via RabbitMQ (default: "localhost")
 
 	Examples:
 		python send.py "start 10"
