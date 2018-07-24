@@ -4,6 +4,44 @@ import os
 import ast
 
 class Converter(object):
+	"""
+		Converter - class, extention of 'object'
+
+		Used mainly to convert from a type to another
+
+		Variables: -
+
+		Methods:
+			fromTextToDict(text, key_value__delimiter='=', entry_demiliter='\n')
+				converts a string into a dictonary
+				the string must follow the structure:
+					key=value
+					key2=value2
+					...
+					keyN=valueN
+
+			fromDictToJson(d)
+				converts a python dictionary to a json string and returns it
+
+			printToFile(what, where)
+				prints 'what' into a file 'where'. Mostly put for convenience
+
+			makeJSON(inFile, outFile)
+				converts a text file to a json file
+				the file must be of structure
+					key=value
+					key2=value2
+					...
+					keyN=valueN
+
+			fromJSONtoDict(filePath)
+				converts a json file into a python dictionary
+
+			groupJSON(outFile, *inFiles)
+				makes a new file with the name "outFile" and stores into it
+				all the info from inFiles. inFiles MUST be .json
+
+	"""
 	def __init__(self):
 		pass
 
@@ -58,29 +96,34 @@ class Converter(object):
 		#call: fromJSONtoKeys(filePath)
 		#input: filePath - string; path of the .json file
 		#output: d - dictionary of items
-		f = open(filePath)
 
-		return ast.literal_eval(json.dumps(json.loads(open(filePath).read())))
+		return ast.literal_eval(
+			json.dumps(
+				json.loads(
+					open(filePath).read())))
 
-	def groupJSON(self, outFile, inFiles):
-		#call: groupJSON(outFile, file1, file2, file3, ...)
+	def groupJSON(self, outFile, *inFiles):
+		#call: groupJSON(outFile, file1[, file2, file3, ...])
 		#input: outFile - string; name of the file where all the JSONs will be grouped into
 		#		*inFiles - list of names of source files from which the text will be grouped into a single file
 		#output: -
+
+		#basically adds the name of the file for each file, adds the contents 
+		#	of the file in the final JSON and indents it to look pretty
 		s = ""
 		for file in inFiles:
 			if file[:-5] == ".json":
-				s += '\n\t"' + file[:-5] + '":\n'
+				s += '\n\t"' + file[:-5] + '":\n' #adds the ": " after each file name added
 				with open(file, 'r') as f:
 					for line in f:
-						s += '\t' + line
+						s += '\t' + line	#adds tabs
 			else:
 				s += '\n\t"' + file + '":\n'
 				with open(file + ".json", 'r') as f:
 					for line in f:
 						s += '\t' + line
 			s += ','
-		s = s[:-1]
+		s = s[:-1]	#removing a final comma to keep the file compatible
 
 		s = "{" + s + "\n}"
 

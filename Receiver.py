@@ -1,4 +1,5 @@
 import pika
+import time
 
 class Receiver(object):
 	def __init__(self, url='localhost'):
@@ -17,7 +18,7 @@ class Receiver(object):
 
 	def callback(self, ch, method, properties, body):
 		print("-----------------------")
-		print(" [x] Received %r" % body)
+		print(" [x] Received %r at %r" % (body, time.strftime("%c")))
 		self.howToProcess(body)
 
 		ch.basic_ack(delivery_tag = method.delivery_tag)
