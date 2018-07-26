@@ -19,7 +19,7 @@ class Converter(object):
 					key2=value2\n
 					...
 					keyN=valueN\n
-						NOTE: this can be customisable, but no spaces allowed
+						NOTE: this can be customisable
 
 			fromDictToJson(d)
 				converts a python dictionary to a json string and returns it
@@ -54,10 +54,10 @@ class Converter(object):
 		text = text.strip()
 		d = {}
 
-		for line in text.split('\n'):
-			tmp = line.split('=')
-			if tmp != ['']:
-				d[tmp[0]] = tmp[1]
+		for line in text.split(entry_demiliter):
+			tmp = line.split(key_value__delimiter)
+			if tmp != ['']:	#if we still have weird lines like '='
+				d[tmp[0].strip()] = tmp[1].strip()	#begone, white spaces!
 
 		return d
 
@@ -79,14 +79,21 @@ class Converter(object):
 		f.write(what)
 		f.close()
 
-	def makeJSON(self, inFile, outFile):
+	def makeJSON(self, inFile, outFile, key_value__delimiter = '=', entry_demiliter = '\n'):
 		#call: makeJSON(inFile, outFile)
 		#input: inFile - string name of the input file
 		#		outFile - string name of the output file
 		#output: -
-		f = io.open(inFile, 'r', encoding='utf16')	#output of batch commands to a file is encoded with utf16
-		s = f.read()
-		d = self.fromTextToDict(s)
+		f = open(inFile, 'r')
+		try:
+			f = io.open(inFile, 'r', encoding='utf16')	#output of batch commands to a file is encoded with utf16
+			s = f.read()
+		except UnicodeError:
+			f = open(inFile, 'r')
+			s = f.read()
+
+		
+		d = self.fromTextToDict(s, key_value__delimiter, entry_demiliter)
 		j = self.fromDictToJson(d)
 
 		self.printToFile(j, outFile)

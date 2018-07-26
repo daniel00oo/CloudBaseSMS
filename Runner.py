@@ -38,6 +38,12 @@ class Runner(object):
 
 		self.osFormat = {}
 		self.osFormat['Windows'] = ['/format:list', '>']
+		self.osFormat['Linux'] = ['>']
+
+		self.delimiters = {}
+		self.delimiters['Windows'] = ['=', '\n']
+		self.delimiters['Linux'] = [':', '\n']
+
 
 
 	def run(self, operatingSystem):
@@ -58,9 +64,11 @@ class Runner(object):
 		for cmd in d:
 			#formatting the output to match the requirements for the converter instance to manage converting
 			#	and then outputting it to a file with the same name as the command
-			subprocess.call(d[cmd] + [self.osFormat[operatingSystem], '%s.txt' % cmd], shell=True)	
+			command = d[cmd] + self.osFormat[operatingSystem] + ['%s.txt' % cmd]
+			command = ' '.join(command)
+			subprocess.call(command, shell=True)	
 			#converting to .json files
-			self.conv.makeJSON('%s.txt' % cmd, '%s.json' % cmd)
+			self.conv.makeJSON('%s.txt' % cmd, '%s.json' % cmd, *self.delimiters[operatingSystem])
 
 		self.conv.groupJSON('metrics.json', *d.keys())
 

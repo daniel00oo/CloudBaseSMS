@@ -43,4 +43,3 @@ class StorageMongoDB(object):
 		#input: -
 		#output: a list of all the entries in the database
 		return list(self.db.metrics.find())
-
