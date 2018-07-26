@@ -1,3 +1,4 @@
+#!/usr/bin/env
 from Sender import Sender
 import sys
 
