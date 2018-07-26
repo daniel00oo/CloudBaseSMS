@@ -8,7 +8,7 @@ def main():
 	queue = 'default' 
 
 	if ac == 1:
-		print("""
+		h = """
 	send [message, queue, url]
 
 		Used to send messages via RabbitMQ to consumer nodes
@@ -23,7 +23,10 @@ def main():
 		python send.py "start 10"
 		python send.py "stop"
 		python send.py "start 100" "default" "localhost"
-			""")
+		
+			"""
+
+	print(h)
 		return(ac)
 
 	if ac >= 4:

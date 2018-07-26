@@ -7,7 +7,7 @@ class Converter(object):
 	"""
 		Converter - class, extention of 'object'
 
-		Used mainly to convert from a type to another
+		Used mainly to convert from a type to another; work with .json files
 
 		Variables: -
 
@@ -15,24 +15,25 @@ class Converter(object):
 			fromTextToDict(text, key_value__delimiter='=', entry_demiliter='\n')
 				converts a string into a dictonary
 				the string must follow the structure:
-					key=value
-					key2=value2
+					key=value\n
+					key2=value2\n
 					...
-					keyN=valueN
+					keyN=valueN\n
+						NOTE: this can be customisable, but no spaces allowed
 
 			fromDictToJson(d)
 				converts a python dictionary to a json string and returns it
 
 			printToFile(what, where)
-				prints 'what' into a file 'where'. Mostly put for convenience
+				prints 'what' into a file 'where'. Mostly implemented for convenience
 
 			makeJSON(inFile, outFile)
 				converts a text file to a json file
 				the file must be of structure
-					key=value
-					key2=value2
+					key=value\n
+					key2=value2\n
 					...
-					keyN=valueN
+					keyN=valueN\n
 
 			fromJSONtoDict(filePath)
 				converts a json file into a python dictionary
