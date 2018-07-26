@@ -3,7 +3,7 @@
 How to install:
 	--Windows--
 
-	1. Install RabbitMQ from tools\Windows\rabbitmq-server-3.7.7
+	1. Install RabbitMQ from https://www.rabbitmq.com/install-windows.html
 	2. Install MongoDB from https://www.mongodb.com/download-center
 	3. Go to installed folder, open a command line and type "mongod --install"
 	2. Run startServices.bat from \tools\Windows\ as Administrator
