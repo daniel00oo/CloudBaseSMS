@@ -1,138 +1,154 @@
 import json
 import io
-import os
 import ast
 
+
 class Converter(object):
-	"""
-		Converter - class, extention of 'object'
 
-		Used mainly to convert from a type to another; work with .json files
+        # Converter - class, extention of 'object'
 
-		Variables: -
+        # Used mainly to convert from a type to another; work with .json files
 
-		Methods:
-			fromTextToDict(text, key_value__delimiter='=', entry_demiliter='\n')
-				converts a string into a dictonary
-				the string must follow the structure:
-					key=value\n
-					key2=value2\n
-					...
-					keyN=valueN\n
-						NOTE: this can be customisable
+        # Variables: -
 
-			fromDictToJson(d)
-				converts a python dictionary to a json string and returns it
+        # Methods:
+        #     fromTextToDict(
+        #         text,
+        #         key_value__delimiter='=',
+        #         entry_demiliter='\n')
 
-			printToFile(what, where)
-				prints 'what' into a file 'where'. Mostly implemented for convenience
+        #         converts a string into a dictonary
+        #         the string must follow the structure:
+        #             key=value\n
+        #             key2=value2\n
+        #             ...
+        #             keyN=valueN\n
+        #                 NOTE: this can be customisable
 
-			makeJSON(inFile, outFile)
-				converts a text file to a json file
-				the file must be of structure
-					key=value\n
-					key2=value2\n
-					...
-					keyN=valueN\n
+        #     fromDictToJson(d)
+        #         converts a python dictionary to a json string and returns it
 
-			fromJSONtoDict(filePath)
-				converts a json file into a python dictionary
+        #     printToFile(what, where)
+        #         prints 'what' into a file 'where'.
+        #         Mostly implemented for convenience
 
-			groupJSON(outFile, *inFiles)
-				makes a new file with the name "outFile" and stores into it
-				all the info from inFiles. inFiles MUST be .json
+        #     makeJSON(inFile, outFile)
+        #         converts a text file to a json file
+        #         the file must be of structure
+        #             key=value\n
+        #             key2=value2\n
+        #             ...
+        #             keyN=valueN\n
 
-	"""
-	def __init__(self):
-		pass
+        #     fromJSONtoDict(filePath)
+        #         converts a json file into a python dictionary
 
-	def fromTextToDict(self, text, key_value__delimiter = '=', entry_demiliter = '\n'):
-		#call: fromTextToDict(text[, key_value__delimiter, entry_demiliter])
-		#input: text - string with the format key=value \n key2=value2
-		#output: d - dictionary containing all the keys and values from 'text'
+        #     groupJSON(outFile, *inFiles)
+        #         makes a new file with the name "outFile" and stores into it
+        #         all the info from inFiles. inFiles MUST be .json
 
-		text = text.strip()
-		d = {}
+    def __init__(self):
+        pass
 
-		for line in text.split(entry_demiliter):
-			tmp = line.split(key_value__delimiter)
-			if tmp != ['']:	#if we still have weird lines like '='
-				d[tmp[0].strip()] = tmp[1].strip()	#begone, white spaces!
+    def fromTextToDict(
+            self,
+            text,
+            key_value__delimiter='=',
+            entry_demiliter='\n'):
+        # call: fromTextToDict(text[, key_value__delimiter, entry_demiliter])
+        # input: text - string with the format key=value \n key2=value2
+        # output: d - dictionary containing all the keys and values from 'text'
 
-		return d
+        text = text.strip()
+        d = {}
 
-	def fromDictToJson(self, d):
-		#call: fromTextToJson(d)
-		#input: d - dictionary with info to be converted
-		#output: s - string contaning info for a json file
+        for line in text.split(entry_demiliter):
+            tmp = line.split(key_value__delimiter)
+            if tmp != ['']:  # if we still have weird lines like '='
+                d[tmp[0].strip()] = tmp[1].strip()  # begone, white spaces!
 
-		s = json.dumps(d, sort_keys = True, indent = 4, separators = (',', ': '))
-		return s
+        return d
 
-	def printToFile(self, what, where):
-		#call: printToFile(what, where)
-		#input: what - string to be printed
-		#		where - name of the file where 'what' should be printed in
-		#output: -
+    def fromDictToJson(self, d):
+        # call: fromTextToJson(d)
+        # input: d - dictionary with info to be converted
+        # output: s - string contaning info for a json file
 
-		f = open('%s' % (where), 'w')
-		f.write(what)
-		f.close()
+        s = json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
+        return s
 
-	def makeJSON(self, inFile, outFile, key_value__delimiter = '=', entry_demiliter = '\n'):
-		#call: makeJSON(inFile, outFile)
-		#input: inFile - string name of the input file
-		#		outFile - string name of the output file
-		#output: -
-		f = open(inFile, 'r')
-		try:
-			f = io.open(inFile, 'r', encoding='utf16')	#output of batch commands to a file is encoded with utf16
-			s = f.read()
-		except UnicodeError:
-			f = open(inFile, 'r')
-			s = f.read()
+    def printToFile(self, what, where):
+        # call: printToFile(what, where)
+        # input: what - string to be printed
+        #       where - name of the file where 'what' should be printed in
+        # output: -
 
-		
-		d = self.fromTextToDict(s, key_value__delimiter, entry_demiliter)
-		j = self.fromDictToJson(d)
+        f = open('%s' % (where), 'w')
+        f.write(what)
+        f.close()
 
-		self.printToFile(j, outFile)
+    def makeJSON(
+            self,
+            inFile,
+            outFile,
+            key_value__delimiter='=',
+            entry_demiliter='\n'):
+        # call: makeJSON(inFile, outFile)
+        # input: inFile - string name of the input file
+        #       outFile - string name of the output file
+        # output: -
+        f = open(inFile, 'r')
+        try:
+            # output of batch commands to a file is encoded with utf16
+            f = io.open(inFile, 'r', encoding='utf16')
+            s = f.read()
+        except UnicodeError:
+            f = open(inFile, 'r')
+            s = f.read()
 
-		f.close()
+        d = self.fromTextToDict(s, key_value__delimiter, entry_demiliter)
+        j = self.fromDictToJson(d)
 
-	def fromJSONtoDict(self, filePath):
-		#call: fromJSONtoKeys(filePath)
-		#input: filePath - string; path of the .json file
-		#output: d - dictionary of items
+        self.printToFile(j, outFile)
 
-		return ast.literal_eval(
-			json.dumps(
-				json.loads(
-					open(filePath).read())))
+        f.close()
 
-	def groupJSON(self, outFile, *inFiles):
-		#call: groupJSON(outFile, file1[, file2, file3, ...])
-		#input: outFile - string; name of the file where all the JSONs will be grouped into
-		#		*inFiles - list of names of source files from which the text will be grouped into a single file
-		#output: -
+    def fromJSONtoDict(self, filePath):
+        # call: fromJSONtoKeys(filePath)
+        # input: filePath - string; path of the .json file
+        # output: d - dictionary of items
 
-		#basically adds the name of the file for each file, adds the contents 
-		#	of the file in the final JSON and indents it to look pretty
-		s = ""
-		for file in inFiles:
-			if file[:-5] == ".json":
-				s += '\n\t"' + file[:-5] + '":\n' #adds the ": " after each file name added
-				with open(file, 'r') as f:
-					for line in f:
-						s += '\t' + line	#adds tabs
-			else:
-				s += '\n\t"' + file + '":\n'
-				with open(file + ".json", 'r') as f:
-					for line in f:
-						s += '\t' + line
-			s += ','
-		s = s[:-1]	#removing a final comma to keep the file compatible
+        return ast.literal_eval(
+            json.dumps(
+                json.loads(
+                    open(filePath).read())))
 
-		s = "{" + s + "\n}"
+    def groupJSON(self, outFile, *inFiles):
+        # call: groupJSON(outFile, file1[, file2, file3, ...])
+        # input: outFile - string; name of the file where all the
+        #                  JSONs will be grouped into
+        #       *inFiles - list of names of source files from which
+        #                  the text will be grouped into a single file
+        # output: -
 
-		open(outFile, 'w').write(s)
+        # basically adds the name of the file for each file, adds the contents
+        #   of the file in the final JSON and indents it to look pretty
+        s = ""
+        for file in inFiles:
+            if file[:-5] == ".json":
+                # adds the ": " after each file name added
+                s += '\n\t"' + file[:-5] + '":\n'
+                with open(file, 'r') as f:
+                    for line in f:
+                        s += '\t' + line    # adds tabs
+            else:
+                s += '\n\t"' + file + '":\n'
+                with open(file + ".json", 'r') as f:
+                    for line in f:
+                        s += '\t' + line
+            s += ','
+        s = s[:-1]  # removing a final comma to keep the file compatible
+
+        s = "{" + s + "\n}"
+
+        open(outFile, 'w').write(s)
