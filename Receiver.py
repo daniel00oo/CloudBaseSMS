@@ -71,3 +71,6 @@ class Receiver(object):
         self.queueDec(que)
         self.setReceive(que)
         self.channel.start_consuming()
+
+    def cancel(self, que='default'):
+        self.channel.basic_cancel(consumer_tag=que)

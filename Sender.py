@@ -41,7 +41,7 @@ class Sender(object):
         # output: -
         self.channel.queue_declare(queue=que, durable=True)
 
-    def send(self, message, que='default1'):
+    def send(self, message, que='default'):
         # call: send(message, que)
         # input: message - string, the message that will be sent
         # 		que - string, the name of the queue in which to put the message

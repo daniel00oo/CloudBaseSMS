@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import platform
 import sys
 import os
@@ -112,7 +113,7 @@ class Receive(Receiver.Receiver):
         # call: stop()
         # input: -
         # output: -
-        if not self.is_running:
+        if self.is_running:
             self.is_running = False
             print("    - Stopping...")
             self.t.stop()

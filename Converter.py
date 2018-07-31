@@ -64,7 +64,7 @@ class Converter(object):
 
         for line in text.split(entry_demiliter):
             tmp = line.split(key_value__delimiter)
-            if tmp != ['']:  # if we still have weird lines like '='
+            if tmp != ['']:  # if we don't have weird lines like "=\n"
                 d[tmp[0].strip()] = tmp[1].strip()  # begone, white spaces!
 
         return d
@@ -97,9 +97,8 @@ class Converter(object):
         # input: inFile - string name of the input file
         #       outFile - string name of the output file
         # output: -
-        f = open(inFile, 'r')
         try:
-            # output of batch commands to a file is encoded with utf16
+            # output of batch commands to a file may be encoded with utf16
             f = io.open(inFile, 'r', encoding='utf16')
             s = f.read()
         except UnicodeError:

@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 from Sender import Sender
 import sys
 

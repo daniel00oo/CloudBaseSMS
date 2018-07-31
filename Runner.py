@@ -23,7 +23,7 @@ class Runner(object):
             #                the necessary formating for the files
 
             # Methods:
-            #     run(operatingSystem)
+            #     run(osys)
             #         Executes throught OS calls commands to get the metrics
             #         and stores them in a file named 'metrics.json'
 
@@ -34,14 +34,14 @@ class Runner(object):
         #   {"Operating system" : ["path", "to", "commands"]}
         # access a command:
         #    r = Runner(filePath)
-        #    r.commands[operatingSystem][command]
+        #    r.commands[osys][command]
         self.commands = self.conv.fromJSONtoDict(loadFile)
 
-        for operatingSystem in self.commands:
+        for osys in self.commands:
             # for portability, we use os.path.join to join
             #   the path with the correct OS separator
-            self.commands[operatingSystem] = os.path.join(
-                *self.commands[operatingSystem])
+            self.commands[osys] = os.path.join(
+                *self.commands[osys])
 
         self.osFormat = {}
         self.osFormat['Windows'] = ['/format:list', '>']
@@ -51,16 +51,16 @@ class Runner(object):
         self.delimiters['Windows'] = ['=', '\n']
         self.delimiters['Linux'] = [':', '\n']
 
-    def run(self, operatingSystem):
-        # call: run(operatingSystem)
-        # input: operatingSystem - string, name of the host operating system
+    def run(self, osys):
+        # call: run(osys)
+        # input: osys - string, name of the host operating system
         # output: -
 
         # changing directory to commands directory
-        os.chdir(os.path.dirname(self.commands[operatingSystem]))
+        os.chdir(os.path.dirname(self.commands[osys]))
         # loading json file into memory as a dict
         d = self.conv.fromJSONtoDict(
-            os.path.basename(self.commands[operatingSystem]))
+            os.path.basename(self.commands[osys]))
 
         if not os.path.isdir('metrics'):
             # making directory to store the metrics to look tidy
@@ -73,14 +73,14 @@ class Runner(object):
             #   for the converter instance to manage converting
             #   and then outputting it to a file with
             #   the same name as the command
-            command = d[cmd] + self.osFormat[operatingSystem] + ['%s.txt' % cmd]
+            command = d[cmd] + self.osFormat[osys] + ['%s.txt' % cmd]
             command = ' '.join(command)
             subprocess.call(command, shell=True)
             # converting to .json files
             self.conv.makeJSON(
                 '%s.txt' % cmd,
                 '%s.json' % cmd,
-                *self.delimiters[operatingSystem])
+                *self.delimiters[osys])
 
         self.conv.groupJSON('metrics.json', *d.keys())
 
