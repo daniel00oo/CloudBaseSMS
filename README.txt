@@ -16,9 +16,12 @@ How to install:
 How to run:
 
 	v To receive messages:
+		python receive.py
 		'startListen.bat' help
 		'startListen.sh' help 
 
 	^ To send messages:
 		send.py help
 		python send.py help
+
+NOTE: startListen.* will output everything to a log file. If you want to control the output, use "python receive.py" instead
