@@ -117,10 +117,8 @@ class Converter(object):
         # input: filePath - string; path of the .json file
         # output: d - dictionary of items
 
-        return ast.literal_eval(
-            json.dumps(
-                json.loads(
-                    open(filePath).read())))
+        with open(filePath) as f:
+            return json.load(f)
 
     def groupJSON(self, outFile, *inFiles):
         # call: groupJSON(outFile, file1[, file2, file3, ...])
