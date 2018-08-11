@@ -1,6 +1,7 @@
-from imports import *
+import imports
 
 
+reload(imports)
 _d = {}
 def update():
     _d.update({})

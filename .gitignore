@@ -6,3 +6,4 @@ tools/*/metrics
 tools/metrics
 dist
 test_metrics
+timer

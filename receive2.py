@@ -14,6 +14,7 @@ class Receive(Receiver.Receiver):
     def __init__(self, url='localhost', db='localhost', port=27017):
         Receiver.Receiver.__init__(self, url)
         self._storage = StorageMongoDB(db, port)
+        self._repeater = Repeat(-1, self.getmetrics)
         try:
             with open('./tools/timer', 'r') as f:
                 i = float(f.read())
@@ -62,7 +63,8 @@ class Receive(Receiver.Receiver):
                 with open('./tools/imports.py', 'a') as f:
                     f.write('import ' + s + '\n')
                 with open('./tools/getmetrics.py', 'a') as f:
-                    f.write('    _d.update({0}.{0}.get())\n'.format(s))
+                    f.write('    _d.update(imports.{0}.{0}.get())\n'.format(s))
+                reload(tools.getmetrics)
         
     def getmetrics(self):
         try:
