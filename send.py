@@ -1,31 +1,40 @@
 #!/usr/bin/env python
 from Sender import Sender
 import sys
+import os
 
+
+def sendFile(file, url='localhost', queue='default'):
+    s = Sender(url)
+    text = os.path.basename(file) + '?\n'
+
+    with open(file, 'r') as f:
+        text += f.read()
+
+    s.send(text, queue)
 
 def main():
-
+    # argument count
     ac = len(sys.argv)
     url = 'localhost'
     queue = 'default'
 
     if ac == 1:
         h = """
-    send [message, queue, url]
+    send [file, queue, url]
 
-        Used to send messages via RabbitMQ to consumer nodes
+        Used to send files via RabbitMQ to consumer nodes
 
-        message - the message you want to be sent (default: None)
-        queue - the queue for the message to be send to. This will
-            influence where the message will be redirected.
+        file - the file you want to be sent
+        queue - the queue for the file to be send to. This will
+            influence where the file will be redirected.
                 (default: "default")
         url	- the url that will be used to store info via RabbitMQ
             (default: "localhost")
 
     Examples:
-        python send.py "start 10"
-        python send.py "stop"
-        python send.py "start 100" "default" "localhost"
+        python send.py
+        python send.py file.py
 
             """
 
@@ -37,8 +46,11 @@ def main():
     if ac >= 3:
         queue = sys.argv[2]
     if ac >= 2:
-        s = Sender(url)
-        s.send(sys.argv[1], queue)
+        print("==> Sending mesage %r in queue %r" % (sys.argv[1], queue))
+        try:
+            sendFile(sys.argv[1], url, queue)
+        except IOError as e:
+            print(e)
 
     return(ac)
 

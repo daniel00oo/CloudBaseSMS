@@ -1,5 +1,0 @@
-{
-	"cpu" : ["wmic", "cpu", "get"],
-	"memory" : ["wmic", "MEMORYCHIP", "get"],
-	"disk" : ["wmic", "logicaldisk", "get"]
-}

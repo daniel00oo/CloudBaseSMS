@@ -46,7 +46,6 @@ class Sender(object):
         # input: message - string, the message that will be sent
         # 		que - string, the name of the queue in which to put the message
         # output: -
-        print("==> Sending mesage %r in queue %r" % (message, que))
         self.queueDec(que)
         self.channel.basic_publish(
             exchange='',

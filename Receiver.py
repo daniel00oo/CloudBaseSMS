@@ -50,8 +50,6 @@ class Receiver(object):
 
     def callback(self, ch, method, properties, body):
         # method required by pika.BlockingConnection.channel.basic_consume()
-        print("-----------------------")
-        print(" [x] Received %r at %r" % (body, time.strftime("%c")))
         self.howToProcess(body)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 

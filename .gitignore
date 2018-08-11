@@ -3,3 +3,6 @@ log*
 testingStuff.py
 desktop.ini
 tools/*/metrics
+tools/metrics
+dist
+test_metrics

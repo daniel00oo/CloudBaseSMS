@@ -1,4 +1,0 @@
-{
-	"cpu" : ["cat", "/proc/cpuinfo"],
-	"memory" : ["cat", "/proc/meminfo"]
-}
