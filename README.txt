@@ -1,5 +1,7 @@
 ~ Supercalifragilisticexpialidocius Monitoring System (SMS) Project ~
 
+pip install SuperMS
+
 How to use:
 	As a consumer node: 
 		receive2.py [queue, url, db, port]
