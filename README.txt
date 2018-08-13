@@ -15,7 +15,7 @@ How to use:
 			file - the file to get the metrics
 				THIS FILE MUST HAVE THE FOLLOWING:
 					- one class with the same name as the file
-					- a method within the class named "get" which returns a python dictionary
+					- a method within named "get" which returns a python dictionary
 			queue - the queue in which to send the file
 			url - the url in which the queue can be found
 		If no arguments are passed to the send.py command, help text will be displayed.

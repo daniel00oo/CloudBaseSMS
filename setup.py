@@ -4,6 +4,7 @@ setup(
     name="SuperMS",
     description='Supercalifragilisticexpialidocius Monitoring System project',
     author='Daniel Herkel',
+    author_email="madalinadaniel60@gmail.com",
     version=0.1,
     url='https://github.com/daniel00oo/CloudBaseSMS',
     scripts=[

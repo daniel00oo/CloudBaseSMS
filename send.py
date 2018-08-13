@@ -13,6 +13,7 @@ def sendFile(file, url='localhost', queue='default'):
 
     s.send(text, queue)
 
+
 def main():
     # argument count
     ac = len(sys.argv)
@@ -33,8 +34,9 @@ def main():
             (default: "localhost")
 
     Examples:
-        python send.py
-        python send.py file.py
+        send.py
+        send.py file.py
+        send.py test_metrics/Cpuinfo.py
 
             """
 
