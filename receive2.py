@@ -8,6 +8,7 @@ import tools.getmetrics
 from Repeat import Repeat
 from StorageMongoDB import StorageMongoDB
 try:
+    # for Python3.5+
     from importlib import reload
 except ImportError:
     pass

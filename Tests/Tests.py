@@ -1,83 +1,13 @@
 import sys
-sys.path.insert(0, "../")
 from StringIO import StringIO
 import mock
 import unittest
-from Runner import Runner
-from Converter import Converter
 from Receiver import Receiver
 from Sender import Sender
+from receive2 import Receive
 
 
 class Testing(unittest.TestCase):
-    # nothing will be executed
-    @mock.patch('Runner.subprocess.call')
-    # mocking os
-    @mock.patch('Runner.os')
-    # the converter shall return fake dictionaries
-    @mock.patch('Converter.Converter')
-    def testRunRun(self, mock_conv, mock_os, mock_subprocess):
-        d2 = {'Windows': [1, 2, 3]}
-
-        # make the path return a list which we need to format the output file
-        mock_os.path.join.return_value = ['some',  'path']
-        mock_os.path.basename.return_value = "some"
-        mock_os.path.dirname.return_value = "some"
-        mock_os.getcwd.return_value = "some"
-        # injects a fake dictonary to search the files
-        mock_conv.return_value.fromJSONtoDict.return_value = d2
-
-        # loading a file
-        r = Runner('some file')
-        # running on an operating system
-        r.run("Windows")
-
-        mock_conv.return_value.fromJSONtoDict.assert_called_with("some")
-        mock_os.chdir.assert_called_with("some")
-        mock_subprocess.assert_called_with('some path /format:list > Windows.txt', shell=True)
-
-    def testConverterFromTextToDict(self):
-        c = Converter()
-
-        # example input
-        t = """
-            text1=text2
-
-        """
-        # desired output
-        d = {'text1': 'text2'}
-
-        assert c.fromTextToDict(t, '=', '\n') == d
-
-    def testConverterFromDictToJson(self):
-        c = Converter()
-
-        # example input
-        d = {'text1': 'text2'}
-        # desired output
-        t = """{
-    "text1": "text2"
-}"""
-        assert c.fromDictToJson(d) == t
-
-    # mocking out the built in open method
-    @mock.patch('__builtin__.open')
-    # mocking out the io open method
-    @mock.patch('io.open')
-    def testConverterMakeJSON(self, mock_io_open, mock_open):
-        t = """
-    text1=text2
-        """
-
-        # simulating a file that contains the text from t
-        mock_io_open.return_value.read.return_value = t
-
-        c = Converter()
-        c.makeJSON("in", "out")
-
-        mock_io_open.assert_called_with('in', 'r', encoding='utf16')
-        mock_open.assert_called_with('out', 'w')
-
     @mock.patch('Receiver.pika')
     def testReceiver(self, mock_pika):
         mock_pika.ConnectionParameters.return_value = "some"
@@ -147,6 +77,60 @@ class Testing(unittest.TestCase):
         s.send("some message")
 
         mock_pika.BlockingConnection.return_value.channel.return_value.basic_publish.assert_called_with(body="some message", exchange='', properties= '', routing_key='default')
+
+    @mock.patch('receive2.Receive.getmetrics')
+    @mock.patch('receive2.StorageMongoDB')
+    @mock.patch('receive2.Receiver.pika')
+    @mock.patch('receive2.Repeat')
+    @mock.patch('receive2.os')
+    @mock.patch('__builtin__.open')
+    def testreceive2(self, mock_open, mock_os, mock_repeat, mock_pika, mock_storage, mock_getmetrics):
+        mock_os.path.exists.return_value = False
+        mock_open.return_value.read.return_value = 1
+
+        r = Receive()
+
+        mock_os.mkdir.assert_called_with('tools')
+        # the second argument is a mock object representing a function
+        assert mock_repeat.call_args[0][0] == 1
+
+    @mock.patch('receive2.reload')
+    @mock.patch('receive2.Repeat')
+    @mock.patch('__builtin__.open')
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def testreceive2HowToProcess(self, mock_print, mock_open, mock_repeat, mock_reload):
+        body = "timer?\n1"
+        r = Receive()
+        r.howToProcess(body)
+
+        mock_open.assert_called_with('./tools/timer', 'w')
+        mock_repeat.return_value.start.assert_called_with()
+        mock_repeat.return_value.stop.assert_called_with()
+
+        body = "Cpuinfo.py?\nclass Someclass():\n    pass"
+        r.howToProcess(body)
+
+        mock_open.assert_called_with('./tools/getmetrics.py', 'a')
+
+    @mock.patch('receive2.tools.getmetrics')
+    @mock.patch('receive2.StorageMongoDB')
+    @mock.patch('receive2.os')
+    @mock.patch('receive2.reload')
+    @mock.patch('__builtin__.open')
+    @mock.patch('receive2.json')
+    @mock.patch('receive2.time')
+    def testreceive2Getmetrics(self, mock_time, mock_json, mock_open, mock_reload, mock_os, mock_storage, mock_getmetrics):
+        mock_getmetrics._d.copy.return_value = {1:1}
+        mock_time.strftime.return_value = 'time'
+
+        d = {1: 1, 'time': 'time'}
+
+        r = Receive()
+        r.getmetrics()
+
+        mock_getmetrics.update.assert_called_with()
+        mock_json.dumps.assert_called_with(d, indent=4)
+        mock_storage.return_value.addDict.assert_called_with(d)
 
 
 unittest.main()
